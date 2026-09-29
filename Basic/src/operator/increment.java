@@ -2,7 +2,7 @@ package operator;
 
 public class increment {
     public static  void main(String[] args){
-        demo5();
+        demo4();
     }
 
     public static void demo1(){
@@ -40,9 +40,7 @@ public class increment {
         System.out.println("b2:" + b2);
         System.out.println("b3:" + b3);
     }
-    public static void demo5(){
 
-    }
 }
 
 
