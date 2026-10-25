@@ -37,10 +37,19 @@
   - 成员变量
   - 成员方法
   - 构造器
+  - 数组对象
+  - 继承
+  - 多态
   - set get
   - private
   - this
   - javaBean标准类
+- 字符串
+  - 创建
+  - 截取 替代
+  - 反转
+  - 链式代码
+  - StringBuilder
 
 内容会随着学习进度持续更新。
 
@@ -56,4 +65,6 @@ src/
 ├── array/          # 数组
 ├── method/         # 方法
 ├── exercise1       # 练习1
-└── oop/            # 面向对象
+├── oop/            # 面向对象
+├── string/         # 字符串
+└── homework/       # 平时作业
