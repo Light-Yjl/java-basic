@@ -48,7 +48,7 @@ public class GameJFrame extends JFrame{
             ImageIcon icon = new ImageIcon("D:\\idea\\project\\JavaStudy\\puzzleGame\\image\\egg\\egg1\\"+ index +".png");
             JLabel jLabel = new JLabel(icon);
             //指定图片位置
-            jLabel.setBounds((i % 4) * 105 + 84,(i / 4) * 105 + 134,105,105);
+            jLabel.setBounds((i % 4) * 105,(i / 4) * 105,105,105);
             this.getContentPane().add(jLabel);
         }
     }
