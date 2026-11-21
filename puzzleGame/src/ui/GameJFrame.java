@@ -51,12 +51,15 @@ public class GameJFrame extends JFrame{
             jLabel.setBounds((i % 4) * 105,(i / 4) * 105,105,105);
             this.getContentPane().add(jLabel);
         }
+        JLabel bg = new JLabel(new ImageIcon("D:\\idea\\project\\JavaStudy\\puzzleGame\\image\\background.png"));
+        bg.setBounds(0,0,580,620);
+        this.getContentPane().add(bg);
     }
 
     /**初始化界面*/
     public void initJFrame() {
         //设置宽高
-        this.setSize(603,680);
+        this.setSize(593,678);
         //设置界面标题
         this.setTitle("拼图单机版 v1.0");
         //设置界面置顶
