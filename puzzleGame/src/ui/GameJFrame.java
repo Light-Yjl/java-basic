@@ -1,9 +1,24 @@
 package ui;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
+import javax.swing.border.BevelBorder;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
-public class GameJFrame extends JFrame{
+public class GameJFrame extends JFrame implements KeyListener {
+
+    //记录空白方块在二维数组中的位置
+    int x = 0;
+    int y = 0;
+    int[][] data = new int[4][4];
+    String pass = "puzzleGame/image/egg/egg1/";
+    int[][] win = {
+            {1,2,3,4},
+            {5,6,7,8},
+            {9,10,11,12},
+            {13,14,15,0}
+    };
+
     public GameJFrame(){
         //初始化界面
         initJFrame();
@@ -18,10 +33,12 @@ public class GameJFrame extends JFrame{
         //显示界面:写在最后
         this.setVisible(true);
     }
+
     /** 初始化数据*/
     private int[][] initData() {
         // 0 表示空白块，和其他图片一起打乱
         int[] arr = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+
         Random r = new Random();
         for (int i = 0; i < arr.length; i++) {
             int index = r.nextInt(arr.length);
@@ -29,31 +46,54 @@ public class GameJFrame extends JFrame{
             arr[i] = arr[index];
             arr[index] = temp;
         }
-        int[][] data = new int[4][4];
+
         for (int i = 0; i < arr.length; i++) {
             data[i / 4][i % 4] = arr[i];
         }
+        for (int i = 0; i < arr.length; i++) {
+            if(arr[i] == 0){
+                x = i / 4;
+                y = i % 4;
+            }
+        }
+
         return data;
 
     }
 
     /**初始化图片*/
     private void initImage(int[][] arr) {
+        //清空原本已经出现的所有图片
+        this.getContentPane().removeAll();
+
+        //胜利显示图片
+        if(victory()){
+            JLabel win = new JLabel(new ImageIcon("puzzleGame/image/win.png"));
+            win.setBounds(105,230,380,200);
+            this.getContentPane().add(win);
+        }
         for (int i = 0; i < 16; i++) {
             int index = arr[i / 4][i % 4];
             // 空白块占据数组中的位置，但不添加图片
             if (index == 0) {
                 continue;
             }
-            ImageIcon icon = new ImageIcon("D:\\idea\\project\\JavaStudy\\puzzleGame\\image\\egg\\egg1\\"+ index +".png");
+            ImageIcon icon = new ImageIcon(pass+ index +".png");
             JLabel jLabel = new JLabel(icon);
             //指定图片位置
-            jLabel.setBounds((i % 4) * 105,(i / 4) * 105,105,105);
+            jLabel.setBounds((i % 4) * 105 + 84,(i / 4) * 105 + 134,105,105);
+            //给图片加边框
+            //0：凸起来
+            //1：凹下去
+            jLabel.setBorder(new BevelBorder(BevelBorder.RAISED));
             this.getContentPane().add(jLabel);
         }
-        JLabel bg = new JLabel(new ImageIcon("D:\\idea\\project\\JavaStudy\\puzzleGame\\image\\background.png"));
+        //添加背景图片
+        JLabel bg = new JLabel(new ImageIcon("puzzleGame/image/background.png"));
         bg.setBounds(0,0,580,620);
         this.getContentPane().add(bg);
+        //刷新界面
+        this.getContentPane().repaint();
     }
 
     /**初始化界面*/
@@ -70,6 +110,8 @@ public class GameJFrame extends JFrame{
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //取消默认居中放置
         setLayout(null);
+        //添加键盘监听事件
+        this.addKeyListener(this);
     }
 
     /**初始化菜单*/
@@ -98,4 +140,98 @@ public class GameJFrame extends JFrame{
         return jMenuBar;
     }
 
+    /**重写Key方法*/
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int code = e.getKeyCode();
+        if(code == KeyEvent.VK_A){
+            this.getContentPane().removeAll();
+            //加载第一张完整图片
+            JLabel all = new JLabel(new ImageIcon(pass + "origin.png"));
+            all.setBounds(84,134,420,420);
+            this.getContentPane().add(all);
+            //添加背景图片
+            JLabel bg = new JLabel(new ImageIcon("puzzleGame/image/background.png"));
+            bg.setBounds(0,0,580,620);
+            this.getContentPane().add(bg);
+            //刷新界面
+            this.getContentPane().repaint();
+
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if(victory()){
+            return;
+        }
+    //对上下左右进行判断
+        //左：37 上：38 右：39 下：40
+        int code = e.getKeyCode();
+        if(code == 37){
+            if(y == data.length - 1){
+                return;
+            }
+            data[x][y] = data[x][y + 1];
+            data[x][y + 1] = 0;
+            y++;
+            initImage(data);
+
+        } else if (code == KeyEvent.VK_UP) {
+            if(x == data.length - 1){
+                return;
+            }
+            // 把空白块下方的图片向上移动，空白块向下移动
+            data[x][y] = data[x + 1][y];
+            data[x + 1][y] = 0;
+            x++;
+            // 根据移动后的数组重新显示图片
+            initImage(data);
+        } else if (code == 39) {
+            if( y == 0){
+                return;
+            }
+            data[x][y] = data[x][y - 1];
+            data[x][y - 1] = 0;
+            y--;
+
+            initImage(data);
+        } else if (code == KeyEvent.VK_DOWN) {
+            if(x == 0){
+                return;
+            }
+            data[x][y] = data[x - 1][y];
+            data[x - 1][y] = 0;
+            x--;
+
+            initImage(data);
+        } else if (code == KeyEvent.VK_A) {
+            initImage(data);
+        }else if(code == KeyEvent.VK_W){
+            data = new int[][]{
+                    {1,2,3,4},
+                    {5,6,7,8},
+                    {9,10,11,12},
+                    {13,14,15,0}
+            };
+            initImage(data);
+        }
+    }
+
+    public boolean victory (){
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[i].length; j++) {
+                if(data[i][j] != win[i][j]){
+                    //只要有一个数据不一样，返回false
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
