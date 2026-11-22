@@ -1,12 +1,19 @@
 package ui;
 import javax.swing.*;
-public class LoginJFrame extends GameJFrame{
+public class LoginJFrame extends JFrame{
+
     public LoginJFrame(){
+        initJFrame();
+
+        this.setVisible(true);
+    }
+    /**初始化界面*/
+    public void initJFrame() {
         this.setSize(488,430);
         this.setTitle("拼图登录界面");
         this.setAlwaysOnTop(true);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setVisible(true);
+        setLayout(null);
     }
 }

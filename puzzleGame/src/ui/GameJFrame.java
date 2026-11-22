@@ -1,23 +1,40 @@
 package ui;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
-public class GameJFrame extends JFrame implements KeyListener {
+public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
     //记录空白方块在二维数组中的位置
     int x = 0;
     int y = 0;
+    int count = 0;
     int[][] data = new int[4][4];
-    String pass = "puzzleGame/image/egg/egg1/";
+    String pass = "puzzleGame/image/frog/frog1/";
     int[][] win = {
             {1,2,3,4},
             {5,6,7,8},
             {9,10,11,12},
             {13,14,15,0}
     };
+
+    //创建条目
+    JMenuItem egg = new JMenuItem("奶蛋");
+    JMenuItem frog = new JMenuItem("奶娃");
+    JMenuItem zodiacSign = new JMenuItem("星座");
+
+    JMenu image = new JMenu("更换图片");
+    JMenuItem replay = new JMenuItem("重新游戏");
+    JMenuItem reLogin = new JMenuItem("重新登录");
+    JMenuItem closeGame = new JMenuItem("关闭游戏");
+    JMenuItem accountItem = new JMenuItem("联系方式");
+    JMenuItem explanation = new JMenuItem("操作指南");
+
+
 
     public GameJFrame(){
         //初始化界面
@@ -50,6 +67,7 @@ public class GameJFrame extends JFrame implements KeyListener {
         for (int i = 0; i < arr.length; i++) {
             data[i / 4][i % 4] = arr[i];
         }
+
         for (int i = 0; i < arr.length; i++) {
             if(arr[i] == 0){
                 x = i / 4;
@@ -72,6 +90,11 @@ public class GameJFrame extends JFrame implements KeyListener {
             win.setBounds(105,230,380,200);
             this.getContentPane().add(win);
         }
+
+        JLabel step = new JLabel("步数：" + count);
+        step.setBounds(20,10,100,30);
+        this.getContentPane().add(step);
+
         for (int i = 0; i < 16; i++) {
             int index = arr[i / 4][i % 4];
             // 空白块占据数组中的位置，但不添加图片
@@ -120,19 +143,29 @@ public class GameJFrame extends JFrame implements KeyListener {
 
         //创建菜单上面的两个选项
         JMenu function = new JMenu("功能");
-        JMenu about = new JMenu("关于我们");
-
-        //创建条目
-        JMenuItem replay = new JMenuItem("重新游戏");
-        JMenuItem reLogin = new JMenuItem("重新登录");
-        JMenuItem closeGame = new JMenuItem("关闭游戏");
-        JMenuItem accountItem = new JMenuItem("联系方式");
+        JMenu about = new JMenu("说明");
 
         //将条目添加到选项中
+        image.add(egg);
+        image.add(frog);
+        image.add(zodiacSign);
+
+        function.add(image);
         function.add(replay);
         function.add(reLogin);
         function.add(closeGame);
         about.add(accountItem);
+        about.add(explanation);
+
+        //给条目绑定事件
+        egg.addActionListener(this);
+        frog.addActionListener(this);
+        zodiacSign.addActionListener(this);
+        replay.addActionListener(this);
+        reLogin.addActionListener(this);
+        closeGame.addActionListener(this);
+        accountItem.addActionListener(this);
+        explanation.addActionListener(this);
 
         //将功能添加到菜单中
         jMenuBar.add(function);
@@ -141,7 +174,6 @@ public class GameJFrame extends JFrame implements KeyListener {
     }
 
     /**重写Key方法*/
-
     @Override
     public void keyTyped(KeyEvent e) {
     }
@@ -180,6 +212,7 @@ public class GameJFrame extends JFrame implements KeyListener {
             data[x][y] = data[x][y + 1];
             data[x][y + 1] = 0;
             y++;
+            count++;
             initImage(data);
 
         } else if (code == KeyEvent.VK_UP) {
@@ -190,6 +223,7 @@ public class GameJFrame extends JFrame implements KeyListener {
             data[x][y] = data[x + 1][y];
             data[x + 1][y] = 0;
             x++;
+            count++;
             // 根据移动后的数组重新显示图片
             initImage(data);
         } else if (code == 39) {
@@ -199,6 +233,7 @@ public class GameJFrame extends JFrame implements KeyListener {
             data[x][y] = data[x][y - 1];
             data[x][y - 1] = 0;
             y--;
+            count++;
 
             initImage(data);
         } else if (code == KeyEvent.VK_DOWN) {
@@ -208,6 +243,7 @@ public class GameJFrame extends JFrame implements KeyListener {
             data[x][y] = data[x - 1][y];
             data[x - 1][y] = 0;
             x--;
+            count++;
 
             initImage(data);
         } else if (code == KeyEvent.VK_A) {
@@ -233,5 +269,67 @@ public class GameJFrame extends JFrame implements KeyListener {
             }
         }
         return true;
+    }
+
+    /**重写ActionListener方法*/
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object obj = e.getSource();
+        Random r = new Random();
+        if(obj == egg){
+            int index = r.nextInt(15) + 1;
+            pass = "puzzleGame/image/egg/egg" + index + "/";
+            initData();
+            count = 0;
+            initImage(data);
+        } else if (obj == frog) {
+            int index = r.nextInt(20) + 1;
+            pass = "puzzleGame/image/frog/frog" + index + "/";
+            initData();
+            count = 0;
+            initImage(data);
+        } else if (obj == zodiacSign) {
+            int index = r.nextInt(12) + 1;
+            pass = "puzzleGame/image/ZodiacSign/ZodiacSign" + index + "/";
+            initData();
+            count = 0;
+            initImage(data);
+        } else if(obj == replay){
+            initData();
+            count = 0;
+            initImage(data);
+        } else if (obj == reLogin) {
+            this.setVisible(false);
+            new LoginJFrame();
+        } else if (obj == closeGame) {
+            System.exit(0);
+        } else if (obj == accountItem) {
+            //弹框对象
+            JDialog jDialog = new JDialog();
+            JLabel jLabel = new JLabel(new ImageIcon("puzzleGame/image/about.png"));
+            //设置图片的位置和宽高
+            jLabel.setBounds(0,0,300,300);
+            //弹框添加照片
+            jDialog.getContentPane().add(jLabel);
+            //弹框大小
+            jDialog.setSize(344,344);
+            //置顶
+            jDialog.setAlwaysOnTop(true);
+            //居中
+            jDialog.setLocationRelativeTo(null);
+            //弹框未关闭无法操作
+            jDialog.setModal(true);
+            //弹框可见
+            jDialog.setVisible(true);
+        } else if (obj == explanation) {
+            JDialog jDialog = new JDialog();
+            JLabel jLabel = new JLabel(new ImageIcon("puzzleGame/image/explain.png"));
+            jLabel.setBounds(0,0,300,300);
+            jDialog.getContentPane().add(jLabel);
+            jDialog.setSize(344,344);
+            jDialog.setAlwaysOnTop(true);
+            jDialog.setLocationRelativeTo(null);
+            jDialog.setVisible(true);
+        }
     }
 }
