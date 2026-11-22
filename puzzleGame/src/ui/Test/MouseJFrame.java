@@ -27,7 +27,6 @@ public class MouseJFrame extends JFrame implements MouseListener {
         //给按钮绑定鼠标事件
         jdb1.addMouseListener(this);
 
-
         this.getContentPane().add(jdb1);
 
         //显示界面:写在最后

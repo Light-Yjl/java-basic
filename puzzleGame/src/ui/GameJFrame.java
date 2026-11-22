@@ -35,7 +35,6 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     JMenuItem explanation = new JMenuItem("操作指南");
 
 
-
     public GameJFrame(){
         //初始化界面
         initJFrame();
@@ -86,7 +85,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
         //胜利显示图片
         if(victory()){
-            JLabel win = new JLabel(new ImageIcon("puzzleGame/image/win.png"));
+            JLabel win = new JLabel(new ImageIcon("puzzleGame/image/game/win.png"));
             win.setBounds(105,230,380,200);
             this.getContentPane().add(win);
         }
@@ -112,7 +111,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             this.getContentPane().add(jLabel);
         }
         //添加背景图片
-        JLabel bg = new JLabel(new ImageIcon("puzzleGame/image/background.png"));
+        JLabel bg = new JLabel(new ImageIcon("puzzleGame/image/game/background.png"));
         bg.setBounds(0,0,580,620);
         this.getContentPane().add(bg);
         //刷新界面
@@ -306,7 +305,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         } else if (obj == accountItem) {
             //弹框对象
             JDialog jDialog = new JDialog();
-            JLabel jLabel = new JLabel(new ImageIcon("puzzleGame/image/about.png"));
+            JLabel jLabel = new JLabel(new ImageIcon("puzzleGame/image/game/about.png"));
             //设置图片的位置和宽高
             jLabel.setBounds(0,0,300,300);
             //弹框添加照片
@@ -323,7 +322,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             jDialog.setVisible(true);
         } else if (obj == explanation) {
             JDialog jDialog = new JDialog();
-            JLabel jLabel = new JLabel(new ImageIcon("puzzleGame/image/explain.png"));
+            JLabel jLabel = new JLabel(new ImageIcon("puzzleGame/image/game/explain.png"));
             jLabel.setBounds(0,0,300,300);
             jDialog.getContentPane().add(jLabel);
             jDialog.setSize(344,344);
